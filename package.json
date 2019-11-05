@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "test": "live-server --open=./SpecRunner.html --port=8081",
     "start": "babel-watch src/main.js"
   },
   "dependencies": {
