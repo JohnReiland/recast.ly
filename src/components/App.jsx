@@ -1,23 +1,39 @@
+import YOUTUBE_API_KEY from '../config/youtube.js';
+import searchYouTube from '../lib/searchYouTube.js';
+import Search from './Search.js';
+import VideoPlayer from './VideoPlayer.js';
+import VideoList from './VideoList.js';
+
 class App extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      currentVideo: exampleVideoData[0],
-      videoList: exampleVideoData
+      videoList: [],
+      currentVideo:
     };
 
     // This binding is necessary to make `this` work in the callback
+    this.getYouTubeVideos = this.getYouTubeVideos.bind(this)
     this.handleVideoListEntryTitleClick = this.handleVideoListEntryTitleClick.bind(this);
   }
 
-  handleSearchInputEvent(event) {
-    searchYouTube({key, query}, (videoList) =>
+  componentDidMount() {
+    this.getYouTubeVideos('dogs in hats');
+  }
+
+  getYouTubeVideos(query) {
+    var options = {
+      key: YOUTUBE_API_KEY,
+      query: query
+    }
+    searchYouTube(options, (videos) => {
       this.setState({
-        videoList: videoList
-      })
-    );
+        videoList: videos,
+        currentVideo: videos[0]
+      });
+    });
   }
 
   handleVideoListEntryTitleClick(video) {
@@ -31,7 +47,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><Search handleSearchInputEvent={this.handleSearchInputEvent.bind(this)}/></div>
+            <div><Search getYouTubeVideos={this.getYouTubeVideos.bind(this)}/></div>
           </div>
         </nav>
         <div className="row">
@@ -51,12 +67,4 @@ class App extends React.Component {
   }
 };
 
-import searchYouTube from '../lib/searchYouTube.js';
-import exampleVideoData from '../data/exampleVideoData.js';
-import Search from './Search.js';
-import VideoPlayer from './VideoPlayer.js';
-import VideoList from './VideoList.js';
 export default App;
-
-// In the ES6 spec, files are "modules" and do not share a top-level scope
-// `var` declarations will only exist globally where explicitly defined

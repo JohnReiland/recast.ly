@@ -1,3 +1,5 @@
+import App from './App.js';
+
 var VideoListEntry = ({video, handleVideoListEntryTitleClick}) => (
   <div className="video-list-entry media">
     <div className="media-left media-middle">
@@ -23,5 +25,5 @@ VideoListEntry.propTypes = {
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope
 // `var` declarations will only exist globally where explicitly defined
-import App from './App.js';
+
 export default VideoListEntry;
