@@ -1,16 +1,29 @@
 class App extends React.Component {
 
-
-
   constructor(props) {
     super(props);
-
-
 
     this.state = {
       currentVideo: exampleVideoData[0],
       videoList: exampleVideoData
     };
+
+    // This binding is necessary to make `this` work in the callback
+    this.handleVideoListEntryTitleClick = this.handleVideoListEntryTitleClick.bind(this);
+  }
+
+  handleSearchInputEvent(event) {
+    searchYouTube({key, query}, (videoList) =>
+      this.setState({
+        videoList: videoList
+      })
+    );
+  }
+
+  handleVideoListEntryTitleClick(video) {
+    this.setState({
+      currentVideo: video
+    });
   }
 
   render() {
@@ -18,15 +31,19 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><h5><em>search</em> view goes here</h5></div>
+            <div><Search handleSearchInputEvent={this.handleSearchInputEvent.bind(this)}/></div>
           </div>
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <div><VideoPlayer video={exampleVideoData[0]}/></div>
+            <div><VideoPlayer video={this.state.currentVideo}/></div>
           </div>
           <div className="col-md-5">
-            <div><VideoList videos={exampleVideoData}/></div>
+            <div>
+              <VideoList
+              handleVideoListEntryTitleClick={this.handleVideoListEntryTitleClick.bind(this)}
+              videos={this.state.videoList}/>
+            </div>
           </div>
         </div>
       </div>
@@ -34,7 +51,9 @@ class App extends React.Component {
   }
 };
 
+import searchYouTube from '../lib/searchYouTube.js';
 import exampleVideoData from '../data/exampleVideoData.js';
+import Search from './Search.js';
 import VideoPlayer from './VideoPlayer.js';
 import VideoList from './VideoList.js';
 export default App;
